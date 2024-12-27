@@ -15,7 +15,7 @@ const ProjectFilesGrid = () => {
   return (
     <div className="space-y-10">
       {/* PDF Files Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 gap-6 ml-20">
         {pdfFiles.map(file => (
           <div
             key={file.id}
@@ -37,7 +37,7 @@ const ProjectFilesGrid = () => {
       </div>
 
       {/* Folders Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-2 gap-6 ml-20">
         {folderFiles.map(file => (
           <div
             key={file.id}
