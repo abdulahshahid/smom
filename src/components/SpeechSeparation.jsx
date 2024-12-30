@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Search, Settings } from 'lucide-react';
-import { SpeechFiles } from '../server/audioFiles';
+import axios from 'axios';
 
 const SpeechSeparation = () => {
     const projectFiles = [
@@ -14,8 +14,17 @@ const SpeechSeparation = () => {
     const [speechFiles, setSpeechFiles] = useState([]);
 
     useEffect(() => {
-        setSpeechFiles(SpeechFiles);
-    }, []);
+        axios.get('/api/speech').then(response => {
+            setSpeechFiles(response.data);
+        })
+        .catch((error) => {
+
+            console.log('Error:', error);
+
+        })
+
+        
+    });
 
 
     return (
@@ -142,7 +151,7 @@ const SpeechSeparation = () => {
 
                 {/* File Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6 ml-20">
-                    {SpeechFiles.map(file => (
+                    {speechFiles.map(file => (
                         <div
                             key={file.id}
                             className="bg-gray-50 rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors"

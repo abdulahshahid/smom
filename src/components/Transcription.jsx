@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Search, Settings } from 'lucide-react';
-import { TranscriptionFiles } from '../server/transcriptionsFiles';
+import axios from 'axios';
 
 const Transcription = () => {
     const projectFiles = [
@@ -14,8 +14,11 @@ const Transcription = () => {
     const [transFiles, setTranscriptionFiles] = useState([]);
 
     useEffect(() => {
-        setTranscriptionFiles(TranscriptionFiles);
-    }, []);
+        axios.get('/api/transcription').then(response => {
+            setTranscriptionFiles(response.data);
+
+        })
+    });
 
 
     return (
@@ -142,7 +145,7 @@ const Transcription = () => {
 
                 {/* File Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6 ml-20">
-                    {TranscriptionFiles.map(file => (
+                    {transFiles.map(file => (
                         <div
                             key={file.id}
                             className="bg-gray-50 rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors"
