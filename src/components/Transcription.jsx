@@ -11,14 +11,24 @@ const Transcription = () => {
         { id: 4, name: 'TRANSCRIPTION', type: 'folder' }
     ];
 
+
+    const projectid = "6772dd8246968c30e5f951ec";
+
     const [transFiles, setTranscriptionFiles] = useState([]);
 
     useEffect(() => {
-        axios.get('/api/transcription').then(response => {
-            setTranscriptionFiles(response.data);
+        axios.get(`/api/transcription/${projectid}`).then(response => {
+            setTranscriptionFiles(response.data.transcripts);
 
         })
     });
+
+    const downloadFile = (filePath, filename) => {
+        const link = document.createElement('a'); // Create a temporary anchor element
+        link.href = filePath; // Set the href to the file URL
+        link.download = filename + '.vtt'; // Set the filename for download
+        link.click(); // Programmatically click the link to trigger the download
+    };
 
 
     return (
@@ -56,17 +66,20 @@ const Transcription = () => {
                             {/* Add nested files for "TRANSCRIPTION" */}
                             {file.name === 'TRANSCRIPTION' && (
                                 <div className="ml-6 space-y-2">
-                                    {transFiles.map(audio => (
+                                    {transFiles.map(trans => (
                                         <div
-                                            key={audio.id}
+                                            key={trans._id}  // Use _id as the key for unique identification
                                             className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer text-[#787486]"
                                         >
                                             <div className="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
-                                            <span>{audio.name}</span>
+                                            {/* Display the name with .vtt extension */}
+                                            <span>{trans.label ? trans.label : 'Unknown Label'} .vtt</span> {/* Show label or default text */}
                                         </div>
                                     ))}
                                 </div>
                             )}
+
+
                         </React.Fragment>
                     ))}
                 </div>
@@ -145,20 +158,29 @@ const Transcription = () => {
 
                 {/* File Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6 ml-20">
-                    {transFiles.map(file => (
+                    {transFiles.map((file, index) => (
                         <div
-                            key={file.id}
+                            key={file._id}  // Use _id as the key for unique identification
                             className="bg-gray-50 rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors"
                             style={{ height: '230px', width: '200px' }}
+                            onClick={() => downloadFile(file.filePath, file.label || `Transcription ${index + 1}`)} // Trigger download on click
                         >
                             <div className="mb-4">
-                                <img src="../src/assets/text-file-symbol.png" alt="audio" height="105" width="94" />
-
+                                <img
+                                    src="../src/assets/text-file-symbol.png" // Adjust the image path as needed
+                                    alt="text file"
+                                    height="105"
+                                    width="94"
+                                />
                             </div>
-                            <span className="text-sm font-medium text-center">{file.name}</span>
+                            {/* Display the transcription name or label */}
+                            <span className="text-sm font-medium text-center">
+                                {file.label || `Transcription ${index + 1}`}.vtt
+                            </span>
                         </div>
                     ))}
                 </div>
+
             </div>
         </div>
     );

@@ -11,21 +11,30 @@ const SpeechSeparation = () => {
         { id: 4, name: 'TRANSCRIPTION', type: 'folder' }
     ];
 
+    const projectid = "6772dd8246968c30e5f951ec";
+
     const [speechFiles, setSpeechFiles] = useState([]);
 
     useEffect(() => {
-        axios.get('/api/speech').then(response => {
-            setSpeechFiles(response.data);
+        axios.get(`/api/speech/${projectid}`).then(response => {
+            setSpeechFiles(response.data.speakerFiles);
         })
-        .catch((error) => {
+            .catch((error) => {
 
-            console.log('Error:', error);
+                console.log('Error:', error);
 
-        })
+            })
 
-        
+
     });
 
+    const handleAudioClick = (filePath) => {
+        // Trigger download or play the audio
+        const link = document.createElement("a");
+        link.href = filePath;
+        link.download = ""; // Leave empty to suggest the filename from the server
+        link.click();
+    };
 
     return (
         <div className="flex h-screen bg-white">
@@ -62,17 +71,19 @@ const SpeechSeparation = () => {
                             {/* Add nested files for "SEPARATED AUDIO" */}
                             {file.name === 'SEPARATED AUDIO' && (
                                 <div className="ml-6 space-y-2">
-                                    {speechFiles.map(audio => (
+                                    {speechFiles.map((audio, index) => (
                                         <div
-                                            key={audio.id}
+                                            key={audio._id}  // Use _id as the key for unique identification
                                             className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer text-[#787486]"
                                         >
                                             <div className="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
-                                            <span>{audio.name}</span>
+                                            {/* Display the speaker's label or default text */}
+                                            <span>{audio.label || `Speaker ${index + 1}`}</span>
                                         </div>
                                     ))}
                                 </div>
                             )}
+
                         </React.Fragment>
                     ))}
                 </div>
@@ -151,20 +162,21 @@ const SpeechSeparation = () => {
 
                 {/* File Grid */}
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-6 ml-20">
-                    {speechFiles.map(file => (
+                    {speechFiles.map((file, index) => (
                         <div
-                            key={file.id}
+                            key={file._id}
                             className="bg-gray-50 rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors"
-                            style={{ height: '230px', width: '200px' }}
+                            style={{ height: "230px", width: "200px" }}
+                            onClick={() => handleAudioClick(file.filePath)} // Trigger on click
                         >
                             <div className="mb-4">
                                 <img src="../src/assets/audio.png" alt="audio" height="105" width="94" />
-
                             </div>
-                            <span className="text-sm font-medium text-center">{file.name}</span>
+                            <span className="text-sm font-medium text-center">{file.label || `Speaker ${index + 1}`}</span>
                         </div>
                     ))}
                 </div>
+
             </div>
         </div>
     );

@@ -7,8 +7,8 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<ProjectView></ProjectView>}></Route>
-      <Route path='separated-speech' element={<SpeechSeparation></SpeechSeparation>}></Route>
-      <Route path='transcription' element={<Transcription></Transcription>}></Route>
+      <Route path='/separated-speech' element={<SpeechSeparation></SpeechSeparation>}></Route>
+      <Route path='/transcription' element={<Transcription></Transcription>}></Route>
     </Routes>
   );
 }
