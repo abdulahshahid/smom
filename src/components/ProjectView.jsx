@@ -28,13 +28,11 @@ const ProjectView = () => {
                 <div className="space-y-2">
                     <div className="text-xs font-medium text-gray-500 mb-2">MY PROJECTS</div>
 
-                    {/* SMOM.pdf */}
                     <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer">
                         <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
                         <span>SMOM.pdf</span>
                     </div>
 
-                    {/* STATISTICS.pdf */}
                     <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer">
                         <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
                         <span>STATISTICS.pdf</span>
