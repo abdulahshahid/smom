@@ -2,16 +2,10 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Search, Settings } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const Transcription = () => {
-    const projectFiles = [
-        { id: 1, name: 'SMOM.pdf', type: 'pdf' },
-        { id: 2, name: 'STATISTICS.pdf', type: 'pdf' },
-        { id: 3, name: 'SEPARATED AUDIO', type: 'folder' },
-        { id: 4, name: 'TRANSCRIPTION', type: 'folder' }
-    ];
-
-
+    
     const projectid = "6772dd8246968c30e5f951ec";
 
     const [transFiles, setTranscriptionFiles] = useState([]);
@@ -30,7 +24,8 @@ const Transcription = () => {
         link.click(); // Programmatically click the link to trigger the download
     };
 
-
+    const navigate = useNavigate();
+    
     return (
         <div className="flex h-screen bg-white">
             {/* Sidebar */}
@@ -51,38 +46,45 @@ const Transcription = () => {
                 {/* Project List */}
                 <div className="space-y-2">
                     <div className="text-xs font-medium text-black-500 mb-2">MY PROJECTS</div>
-                    {projectFiles.map(file => (
-                        <React.Fragment key={file.id}>
+
+                    {/* SMOM.pdf */}
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer">
+                        <div className="w-1.5 h-1.5 rounded-full bg-black"></div>
+                        <span className="text-black">SMOM.pdf</span>
+                    </div>
+
+                    {/* STATISTICS.pdf */}
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer">
+                        <div className="w-1.5 h-1.5 rounded-full bg-black"></div>
+                        <span className="text-black">STATISTICS.pdf</span>
+                    </div>
+
+                    {/* SEPARATED AUDIO */}
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={() => navigate("/separated-speech")}>
+                        <div className="w-1.5 h-1.5 rounded-full bg-black"></div>
+                        <span className="text-black">SEPARATED AUDIO</span>
+                    </div>
+
+                    {/* TRANSCRIPTION */}
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={() => navigate("/transcription")}>
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                        <span className="text-black">TRANSCRIPTION</span>
+                    </div>
+
+                    {/* Nested files under TRANSCRIPTION */}
+                    <div className="ml-6 space-y-2">
+                        {transFiles.map((trans) => (
                             <div
-                                className={`flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer`}
+                                key={trans._id} // Use _id as the key for unique identification
+                                className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer text-[#787486]"
                             >
-                                <div
-                                    className={`w-1.5 h-1.5 rounded-full ${file.name === 'TRANSCRIPTION' ? 'bg-red-500' : 'bg-black'}`}
-                                ></div>
-                                <span className={`${file.name === 'TRANSCRIPTION' ? 'text-black' : 'text-black'}`}>
-                                    {file.name}
-                                </span>
+                                <div className="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
+                                <span>{trans.label ? trans.label : "Unknown Label"} .vtt</span>
                             </div>
-                            {/* Add nested files for "TRANSCRIPTION" */}
-                            {file.name === 'TRANSCRIPTION' && (
-                                <div className="ml-6 space-y-2">
-                                    {transFiles.map(trans => (
-                                        <div
-                                            key={trans._id}  // Use _id as the key for unique identification
-                                            className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer text-[#787486]"
-                                        >
-                                            <div className="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
-                                            {/* Display the name with .vtt extension */}
-                                            <span>{trans.label ? trans.label : 'Unknown Label'} .vtt</span> {/* Show label or default text */}
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-
-                        </React.Fragment>
-                    ))}
+                        ))}
+                    </div>
                 </div>
+
 
 
 

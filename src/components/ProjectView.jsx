@@ -1,14 +1,11 @@
 import React from 'react';
 import { Search, Share, Settings } from 'lucide-react';
 import ProjectFilesGrid from './ProjectFilesGrid';
+import { useNavigate } from "react-router-dom";
 
 const ProjectView = () => {
-    const projectFiles = [
-        { id: 1, name: 'SMOM.pdf', type: 'pdf' },
-        { id: 2, name: 'STATISTICS.pdf', type: 'pdf' },
-        { id: 3, name: 'SEPARATED AUDIO', type: 'folder' },
-        { id: 4, name: 'TRANSCRIPTION', type: 'folder' }
-    ];
+
+    const navigate = useNavigate();
 
     return (
         <div className="flex h-screen bg-white">
@@ -30,13 +27,31 @@ const ProjectView = () => {
                 {/* Project List */}
                 <div className="space-y-2">
                     <div className="text-xs font-medium text-gray-500 mb-2">MY PROJECTS</div>
-                    {projectFiles.map(file => (
-                        <div key={file.id} className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer">
-                            <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
-                            <span>{file.name}</span>
-                        </div>
-                    ))}
+
+                    {/* SMOM.pdf */}
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                        <span>SMOM.pdf</span>
+                    </div>
+
+                    {/* STATISTICS.pdf */}
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer">
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                        <span>STATISTICS.pdf</span>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={() => navigate("/separated-speech")}>
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                        <span>SEPARATED AUDIO</span>
+                    </div>
+
+                    {/* TRANSCRIPTION */}
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={() => navigate("/transcription")}>
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                        <span>TRANSCRIPTION</span>
+                    </div>
                 </div>
+
 
                 {/* Settings */}
                 <div className="absolute bottom-4 left-4 flex items-center gap-2 text-gray-600 cursor-pointer">

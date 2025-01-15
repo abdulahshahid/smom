@@ -2,15 +2,9 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Search, Settings } from 'lucide-react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 const SpeechSeparation = () => {
-    const projectFiles = [
-        { id: 1, name: 'SMOM.pdf', type: 'pdf' },
-        { id: 2, name: 'STATISTICS.pdf', type: 'pdf' },
-        { id: 3, name: 'SEPARATED AUDIO', type: 'folder' },
-        { id: 4, name: 'TRANSCRIPTION', type: 'folder' }
-    ];
-
     const projectid = "6772dd8246968c30e5f951ec";
 
     const [speechFiles, setSpeechFiles] = useState([]);
@@ -36,6 +30,8 @@ const SpeechSeparation = () => {
         link.click();
     };
 
+    const navigate = useNavigate();
+
     return (
         <div className="flex h-screen bg-white">
             {/* Sidebar */}
@@ -56,37 +52,45 @@ const SpeechSeparation = () => {
                 {/* Project List */}
                 <div className="space-y-2">
                     <div className="text-xs font-medium text-black-500 mb-2">MY PROJECTS</div>
-                    {projectFiles.map(file => (
-                        <React.Fragment key={file.id}>
-                            <div
-                                className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer"
-                            >
-                                {/* Explicit logic for dot color */}
-                                <div
-                                    className={`w-1.5 h-1.5 rounded-full ${file.name === 'SEPARATED AUDIO' ? 'bg-red-500' : 'bg-black'
-                                        }`}
-                                ></div>
-                                <span className="text-black">{file.name}</span>
-                            </div>
-                            {/* Add nested files for "SEPARATED AUDIO" */}
-                            {file.name === 'SEPARATED AUDIO' && (
-                                <div className="ml-6 space-y-2">
-                                    {speechFiles.map((audio, index) => (
-                                        <div
-                                            key={audio._id}  // Use _id as the key for unique identification
-                                            className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer text-[#787486]"
-                                        >
-                                            <div className="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
-                                            {/* Display the speaker's label or default text */}
-                                            <span>{audio.label || `Speaker ${index + 1}`}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
 
-                        </React.Fragment>
-                    ))}
+                    {/* SMOM.pdf */}
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer">
+                        <div className="w-1.5 h-1.5 rounded-full bg-black"></div>
+                        <span className="text-black">SMOM.pdf</span>
+                    </div>
+
+                    {/* STATISTICS.pdf */}
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer">
+                        <div className="w-1.5 h-1.5 rounded-full bg-black"></div>
+                        <span className="text-black">STATISTICS.pdf</span>
+                    </div>
+
+                    {/* SEPARATED AUDIO */}
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={() => navigate("/separated-speech")}>
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                        <span className="text-black">SEPARATED AUDIO</span>
+                    </div>
+
+                    {/* Nested files under SEPARATED AUDIO */}
+                    <div className="ml-6 space-y-2">
+                        {speechFiles.map((audio, index) => (
+                            <div
+                                key={audio._id} // Use _id as the key for unique identification
+                                className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer text-[#787486]"
+                            >
+                                <div className="w-1.5 h-1.5 rounded-full bg-gray-400"></div>
+                                <span>{audio.label || `Speaker ${index + 1}`}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* TRANSCRIPTION */}
+                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={() => navigate("/transcription")}>
+                        <div className="w-1.5 h-1.5 rounded-full bg-black"></div>
+                        <span className="text-black">TRANSCRIPTION</span>
+                    </div>
                 </div>
+
 
 
 
