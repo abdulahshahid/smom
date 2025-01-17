@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const ProjectFilesGrid = () => {
   const navigate = useNavigate();
-  
+
   return (
     <div className="space-y-10">
       {/* PDF Files Row */}
