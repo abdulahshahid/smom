@@ -1,60 +1,98 @@
-import React from 'react';
 import { Search, Share, Settings } from 'lucide-react';
+import React, { useState } from "react";
 import ProjectFilesGrid from './ProjectFilesGrid';
 import { useNavigate } from "react-router-dom";
 
 const ProjectView = () => {
 
     const navigate = useNavigate();
+    const [isCollapsed, setIsCollapsed] = useState(false);
+    const toggleSidebar = () => {
+        setIsCollapsed(!isCollapsed);
+    };
 
     return (
         <div className="flex h-screen bg-white">
             {/* Sidebar */}
-            <div className="w-64 border-r p-4">
+            <div
+                className={`${isCollapsed ? "w-16" : "w-64"
+                    } border-r p-4 transition-all duration-300 relative`}
+            >
+                {/* Header */}
                 <div className="flex items-center gap-2 mb-6">
                     <div className="w-6 h-6">
-                        <img src="../src/assets/logo.png" alt="Logo" className="w-full h-full" />
+                        <img
+                            src="../src/assets/logo.png"
+                            alt="Logo"
+                            className="w-full h-full"
+                        />
                     </div>
-                    <span className="font-medium">My Projects</span>
-                    <button className="ml-auto">
-                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12.5 17.225C12.3417 17.225 12.1834 17.1667 12.0584 17.0417L6.62502 11.6083C5.74169 10.725 5.74169 9.27499 6.62502 8.39165L12.0584 2.95832C12.3 2.71665 12.7 2.71665 12.9417 2.95832C13.1834 3.19999 13.1834 3.59999 12.9417 3.84165L7.50836 9.27499C7.10836 9.67499 7.10836 10.325 7.50836 10.725L12.9417 16.1583C13.1834 16.4 13.1834 16.8 12.9417 17.0417C12.8167 17.1583 12.6584 17.225 12.5 17.225Z" fill="#787486" />
+                    {!isCollapsed && <span className="font-medium">My Projects</span>}
+                    <button onClick={toggleSidebar} className="ml-auto">
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                d="M12.5 17.225C12.3417 17.225 12.1834 17.1667 12.0584 17.0417L6.62502 11.6083C5.74169 10.725 5.74169 9.27499 6.62502 8.39165L12.0584 2.95832C12.3 2.71665 12.7 2.71665 12.9417 2.95832C13.1834 3.19999 13.1834 3.59999 12.9417 3.84165L7.50836 9.27499C7.10836 9.67499 7.10836 10.325 7.50836 10.725L12.9417 16.1583C13.1834 16.4 13.1834 16.8 12.9417 17.0417C12.8167 17.1583 12.6584 17.225 12.5 17.225Z"
+                                fill="#787486"
+                            />
                         </svg>
-
                     </button>
                 </div>
 
                 {/* Project List */}
                 <div className="space-y-2">
-                    <div className="text-xs font-medium text-gray-500 mb-2">MY PROJECTS</div>
-
-                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer">
-                        <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
-                        <span>SMOM.pdf</span>
+                    <div
+                        className={`text-xs font-medium text-gray-500 mb-2 ${isCollapsed && "hidden"
+                            }`}
+                    >
+                        MY PROJECTS
                     </div>
 
-                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer">
+                    <div
+                        className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer"
+                        onClick={() => navigate("/smom")}
+                    >
                         <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
-                        <span>STATISTICS.pdf</span>
+                        {!isCollapsed && <span>SMOM.pdf</span>}
                     </div>
 
-                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={() => navigate("/separated-speech")}>
+                    <div
+                        className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer"
+                        onClick={() => navigate("/statistics")}
+                    >
                         <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
-                        <span>SEPARATED AUDIO</span>
+                        {!isCollapsed && <span>STATISTICS.pdf</span>}
                     </div>
 
-                    {/* TRANSCRIPTION */}
-                    <div className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer" onClick={() => navigate("/transcription")}>
+                    <div
+                        className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer"
+                        onClick={() => navigate("/separated-speech")}
+                    >
                         <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
-                        <span>TRANSCRIPTION</span>
+                        {!isCollapsed && <span>SEPARATED AUDIO</span>}
+                    </div>
+
+                    <div
+                        className="flex items-center gap-2 text-sm hover:bg-gray-100 p-2 rounded cursor-pointer"
+                        onClick={() => navigate("/transcription")}
+                    >
+                        <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
+                        {!isCollapsed && <span>TRANSCRIPTION</span>}
                     </div>
                 </div>
 
-
                 {/* Settings */}
-                <div className="absolute bottom-4 left-4 flex items-center gap-2 text-gray-600 cursor-pointer">
+                <div
+                    className={`absolute bottom-4 left-4 flex items-center gap-2 text-gray-600 cursor-pointer ${isCollapsed && "justify-center"
+                        }`}
+                >
                     <Settings className="w-4 h-4" />
-                    <span className="text-sm">Settings</span>
+                    {!isCollapsed && <span className="text-sm">Settings</span>}
                 </div>
             </div>
 
