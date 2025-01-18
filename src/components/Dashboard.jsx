@@ -1,10 +1,29 @@
 import React, { useState } from 'react';
 import { Upload, HardDrive, FileText, MoreVertical, Plus, Cloud, Search, Bell, Calendar, ArrowUp, ArrowDown } from 'lucide-react';
 
+
+const LoadingOverlay = ({ isVisible }) => {
+    if (!isVisible) return null;
+  
+    return (
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+        <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+          <div className="flex flex-col items-center text-center space-y-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+            <h3 className="text-xl font-semibold text-gray-900">Hold tight! We're processing your meeting</h3>
+            {/* <p className="text-gray-600">Rest assured, you can leave everything to us. We'll take care of transcribing and analyzing your meeting.</p> */}
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+
 const DashboardPage = () => {
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [openDropdownId, setOpenDropdownId] = useState(null);
-
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
     // Sample data for recent projects
     const recentProjects = [
         {
@@ -55,16 +74,51 @@ const DashboardPage = () => {
         }
     ];
 
+    
+    // Function to trigger file selection
+    const handleFileChange = async (file) => {
+        if (!file) return;
+
+        console.log("Selected file:", file);
+        setIsUploading(true);
+
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+
+            const response = await fetch("/api/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("File uploaded successfully:", data);
+                // alert("File uploaded successfully!");
+            } else {
+                console.error("Upload failed:", response.statusText);
+                alert("File upload failed. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error during file upload:", error);
+            alert("An error occurred during file upload.");
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    // Function to trigger file selection
     const handleLocalUpload = () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'audio/*';
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = "audio/*, video/*";
         input.onchange = (e) => {
             const file = e.target.files[0];
-            console.log('Uploading local file:', file);
+            handleFileChange(file); // Start uploading immediately after selection
         };
         input.click();
     };
+
 
     const handleGoogleDriveUpload = () => {
         console.log('Opening Google Drive picker');
@@ -80,6 +134,7 @@ const DashboardPage = () => {
 
     return (
         <div className="min-h-screen bg-gray-50">
+            <LoadingOverlay isVisible={isUploading} />
             {/* Top Navigation Bar */}
             <nav className="bg-white border-b border-gray-200 fixed w-full z-30 top-0">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -216,8 +271,8 @@ const DashboardPage = () => {
                                         </div>
                                         <div className="flex items-center space-x-4">
                                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${project.status === 'Completed' ? 'bg-green-100 text-green-800' :
-                                                    project.status === 'Processing' ? 'bg-blue-100 text-blue-800' :
-                                                        'bg-gray-100 text-gray-800'
+                                                project.status === 'Processing' ? 'bg-blue-100 text-blue-800' :
+                                                    'bg-gray-100 text-gray-800'
                                                 }`}>
                                                 {project.status}
                                             </span>
